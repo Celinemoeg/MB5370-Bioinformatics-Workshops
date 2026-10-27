@@ -1,6 +1,6 @@
 ---
 title: "Workshop 1: Introduction to the Command Line"
-author: "Your Name"
+author: "Celine M. Egsaeter"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -28,10 +28,104 @@ Replace the text below each heading with your own notes. Copy each command you r
 
 Notes on `pwd`, `ls`, `cd` and how unix commands are put together.
 
+**ls**
+```{r}
+ls # shows files
+ls -l # lists files in long format
+ls -lr # lists files as in long format -r revers sorts the files
+ls -lrh #
+```
+
+```{r}
+ls -l/usr #/usr tells the terminal what directionary to pull from
+```
+
+```{r}
+ls /home/ #shows all the users in the rstudio = our class
+```
+
+**cd**
+
+```{r}
+cd ~/mb5370-workshops/command_line # cd tells the terminal where to go /where we want to be, sort of gives us the opertunity to place ouself in the righ location in the files and folders. 
+```
+
+```{r}
+cd .. # moves up in the directry
+```
+
+**pwd**
+
+```{r}
+pwd # Showes us where in the folders and files we are lockated 
+```
+
+
 ## Viewing and searching files
 
 Notes on `cat`, `head`, `grep` and `man`.
 
+**cat**
+```{r}
+cat test.fasta # Showes the content of the file
+```
+
+**head**
+```{r}
+head -2 test.fasta # head displayes the first 10 lines of the file, but the -2 only displays the first 2 lines
+```
+
+**grep**
+```{r}
+grep '^>' test.fasta # the grep comand finds specific lines in files.
+```
+
+```{r}
+grep KDRNKKNSAK test.fasta # for example here we ask to find a specific amino acid sequence (KDRNKKNSAK) in the test.fasta file
+```
+
+```{r}
+grep -n KDRNKKNSAK test.fasta # this one searches the file and shows the line number the sequence is on
+```
+
+
+**man**
+```{r}
+man grep # to se usefull flags we use the man command to veiw them. 
+```
+
+some useful flags include: 
+
+-i -> case insensitive match
+
+-n -> report line number of matches
+
+-c -> count all files that contain the pattern
+
+-w -> match whole words only
+
+
 ## Sequence file formats
 
 Notes on the fasta and fastq formats.
+
+**fasta**
+- often used for "refrence data 
+
+**fastaq**
+- most commonly used for "raw" reads from next generation sequencing experiments.
+
+
+## Other notes: 
+- spaces are importaint
+- dont know what cd does: takes you where you want to go in the difrent files/folders (make sure you write the names corectly)
+- ls list files
+- mkdr comand use to make new directorys
+
+
+/ -> separates the parts of difrent directories
+
+- you can be in two places at once - wwhere you are in the terminal might not be where you are in the files in the panel on the right side. 
+
+
+
