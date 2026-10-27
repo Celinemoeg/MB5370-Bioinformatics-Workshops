@@ -29,6 +29,7 @@ Replace the text below each heading with your own notes. Copy each command you r
 Notes on `pwd`, `ls`, `cd` and how unix commands are put together.
 
 **ls**
+
 ```{r}
 ls # shows files
 ls -l # lists files in long format
@@ -60,22 +61,24 @@ cd .. # moves up in the directry
 pwd # Showes us where in the folders and files we are lockated 
 ```
 
-
 ## Viewing and searching files
 
 Notes on `cat`, `head`, `grep` and `man`.
 
 **cat**
+
 ```{r}
 cat test.fasta # Showes the content of the file
 ```
 
 **head**
+
 ```{r}
 head -2 test.fasta # head displayes the first 10 lines of the file, but the -2 only displays the first 2 lines
 ```
 
 **grep**
+
 ```{r}
 grep '^>' test.fasta # the grep comand finds specific lines in files.
 ```
@@ -88,51 +91,46 @@ grep KDRNKKNSAK test.fasta # for example here we ask to find a specific amino ac
 grep -n KDRNKKNSAK test.fasta # this one searches the file and shows the line number the sequence is on
 ```
 
-
 **man**
+
 ```{r}
 man grep # to se usefull flags we use the man command to veiw them. 
 ```
 
-some useful flags include: 
+some useful flags include:
 
--i -> case insensitive match
+-i -\> case insensitive match
 
--n -> report line number of matches
+-n -\> report line number of matches
 
--c -> count all files that contain the pattern
+-c -\> count all files that contain the pattern
 
--w -> match whole words only
-
+-w -\> match whole words only
 
 ## Sequence file formats
 
 Notes on the fasta and fastq formats.
 
-**fasta**
-- often used for "refrence data 
+**fasta** - often used for "refrence data
 
-**fastaq**
-- most commonly used for "raw" reads from next generation sequencing experiments.
+**fastaq** - most commonly used for "raw" reads from next generation sequencing experiments.
 
+## Other notes:
 
-## Other notes: 
 - spaces are importaint
 - dont know what cd does: takes you where you want to go in the difrent files/folders (make sure you write the names corectly)
 - ls list files
 - mkdr comand use to make new directorys
 
+/ -\> separates the parts of difrent directories
 
-/ -> separates the parts of difrent directories
+- you can be in two places at once - wwhere you are in the terminal might not be where you are in the files in the panel on the right side.
 
-- you can be in two places at once - wwhere you are in the terminal might not be where you are in the files in the panel on the right side. 
-
-# Workshop 2 
+# Workshop 2
 
 ```{r}
 pwd # dubble check i am in the right spot
 ```
-
 
 ## Redbean Assembly
 
@@ -145,6 +143,7 @@ cat /pvol/data/amtp4/*_[012].fastq > amtp4.fastq #
 ```
 
 Run the asembly
+
 ```{r}
 wtdbg2 -x ont -g 5m -t 4 -i amtp4.fastq -fo amtp4
 wtpoa-cns -t 4 -i amtp4.ctg.lay.gz -fo amtp4.ctg.fa # takes a few minutes to run this assembly
@@ -152,26 +151,21 @@ wtpoa-cns -t 4 -i amtp4.ctg.lay.gz -fo amtp4.ctg.fa # takes a few minutes to run
 ```
 
 **Activity:** Inspect assembly statistics
+
 ```{r}
 assembly-stats amtp4.ctg.fa 
 ```
 
-shows:
-stats for amtp4.ctg.fa
-sum = 4031799, n = 133, ave = 30314.28, largest = 143785
-N50 = 51901, n = 23
-N60 = 41852, n = 31
-N70 = 28222, n = 44
-N80 = 21358, n = 59
-N90 = 13591, n = 83
-N100 = 2697, n = 133
-N_count = 0
-Gaps = 0
+shows: stats for amtp4.ctg.fa
+
+sum = 4031799, n = 133, ave = 30314.28, largest = 143785 N50 = 51901, n = 23 N60 = 41852, n = 31 N70 = 28222, n = 44 N80 = 21358, n = 59 N90 = 13591, n = 83 N100 = 2697, n = 133 N_count = 0 Gaps = 0
+
 **How good does the assembly look in terms of contiguity and completeness?**
 
-n=133 means it is fairly fragmented, a finished bacterial genome would be one or a few pieces. 
+n=133 means it is fairly fragmented, a finished bacterial genome would be one or a few pieces.
 
 **Run redbean with higher coverage**
+
 ```{r}
 cat /pvol/data/amtp4/*.fastq > amtp4_20x.fastq
 wtdbg2 -x ont -g 5m -t 4 -i amtp4_20x.fastq -fo amtp4_20x
@@ -180,20 +174,12 @@ wtpoa-cns -t 4 -i amtp4_20x.ctg.lay.gz -fo amtp4_20x.ctg.fa # data equivalent ot
 ```
 
 **Activity:** Inspect assembly stats for higher coverage
+
 ```{r}
 assembly-stats amtp4_20x.fastq
 ```
 
-result:
-sum = 159325343, n = 40000, ave = 3983.13, largest = 42815
-N50 = 7147, n = 6711
-N60 = 5719, n = 9200
-N70 = 4455, n = 12358
-N80 = 3248, n = 16524
-N90 = 2008, n = 22665
-N100 = 109, n = 40000
-N_count = 0
-Gaps = 0
+result: sum = 159325343, n = 40000, ave = 3983.13, largest = 42815 N50 = 7147, n = 6711 N60 = 5719, n = 9200 N70 = 4455, n = 12358 N80 = 3248, n = 16524 N90 = 2008, n = 22665 N100 = 109, n = 40000 N_count = 0 Gaps = 0
 
 looks better
 
@@ -205,12 +191,14 @@ cd ..
 cd flye_genome #getting to the right folder
 ```
 
-**Run Flye on both datasets**
-Make symbolic links to the same raw data we used for redbean
+**Run Flye on both datasets** Make symbolic links to the same raw data we used for redbean
+
 ```{r}
 ln -s ../redbean/amtp4.fastq .
 ln -s ../redbean/amtp4_20x.fastq .
 ```
+
+**Activity:** Monitor running jobs
 
 ```{r}
 sbatch run_flye_small.sh #puts it in the que
@@ -230,4 +218,101 @@ tail -f slurm-316.out #output again?
 # run controll c to get out of it 
 ```
 
+**Activity:** Assess assemblies made using Flye
 
+```{r}
+cd amtp4 # getting to the right folder, i know i dont need to do this but i dont remeber how 
+```
+
+```{r}
+assembly-stats assembly.fasta #checking stats
+```
+
+stats for assembly.fasta
+
+sum = 5177531, n = 77, ave = 67240.66, largest = 368928 N50 = 119681, n = 16 N60 = 99129, n = 20 N70 = 73541, n = 26 N80 = 48093, n = 35 N90 = 31578, n = 48 N100 = 2777, n = 77 N_count = 0 Gaps = 0
+
+```{r}
+sbatch run_flye_large.sh # running/submitting the large file to the que
+```
+
+**Activity:** Inspect low coverage flye assembly with Bandage
+
+In this visualisation contiguous segments are shown as solid coloured lines. Some of these are separated into independent graphs whereas others (eg the mess in the top left) are connected to each other via black lines. There are few things to keep in mind here;
+
+1.  Biologically distinct entities such as chromosomes or plasmids will form separate graphs
+
+2.  Separated graphs can also occur if coverage is very low and no reads exist to join parts of the assembly together
+
+3.  Highly joined regions (eg top left) tend to occur because repeats create ambiguities. There are too many connections and the assembler has trouble choosing the correct path between them.
+
+## fly_small
+
+![](images/clipboard-1151283422.png)
+
+**Activity:** Inspect high coverage flye assembly with Bandage
+
+## fly_large
+
+The high coverage (20x) assembly generated two "whole" bacteria genomes, the two circles connected with a repeat.
+
+![](images/clipboard-823003169.png)
+
+**check** stats for 20x
+
+```{r}
+cd amtp4_20x
+```
+
+```{r}
+assembly-stats assembly.fasta
+```
+
+stats for assembly.fasta
+
+sum = 7449456, n = 52, ave = 143258.77, largest = 3378257
+
+N50 = 1775300, n = 2
+
+N60 = 1775300, n = 2
+
+N70 = 113574, n = 3
+
+N80 = 76177, n = 11
+
+N90 = 44872, n = 24
+
+N100 = 5575, n = 52
+
+N_count = 0
+
+Gaps = 0
+
+## **Check Assembly Quality with QUAST**
+
+Use this command to look at the contig sizes in the flye assembly
+
+```{r}
+cat ../flye_genome/amtp4_20x/assembly.fasta | bioawk -c fastx '{print $name, length($seq)}' | sort -n -k2
+```
+
+for me the longest were cotig_59 and contig_10
+
+Note that you will need to modify this command by replacing `XX` and `YY` with the contig numbers of the two longest contigs in your assembly.
+
+```{r}
+samtools faidx ../flye_genome/amtp4_20x/assembly.fasta contig_59 contig_10 > flye_asm/vibrio.fasta
+```
+
+Now do the same for redbean
+
+```{r}
+cat ../redbean/amtp4_20x.ctg.fa | bioawk -c fastx '{print $name, length($seq)}' | sort -n -k2
+samtools faidx ../redbean/amtp4_20x.ctg.fa ctg1 ctg2 > redbean_asm/vibrio.fasta
+```
+
+ctg2 1764939
+
+ctg1 3343994
+
+my two longest
