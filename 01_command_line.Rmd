@@ -127,5 +127,107 @@ Notes on the fasta and fastq formats.
 
 - you can be in two places at once - wwhere you are in the terminal might not be where you are in the files in the panel on the right side. 
 
+# Workshop 2 
+
+```{r}
+pwd # dubble check i am in the right spot
+```
+
+
+## Redbean Assembly
+
+```{r}
+cd ~/mb5370-workshops/redbean # navigate to the redbean folder
+```
+
+```{r}
+cat /pvol/data/amtp4/*_[012].fastq > amtp4.fastq # 
+```
+
+Run the asembly
+```{r}
+wtdbg2 -x ont -g 5m -t 4 -i amtp4.fastq -fo amtp4
+wtpoa-cns -t 4 -i amtp4.ctg.lay.gz -fo amtp4.ctg.fa # takes a few minutes to run this assembly
+#does 6 coverage of the target genome
+```
+
+**Activity:** Inspect assembly statistics
+```{r}
+assembly-stats amtp4.ctg.fa 
+```
+
+shows:
+stats for amtp4.ctg.fa
+sum = 4031799, n = 133, ave = 30314.28, largest = 143785
+N50 = 51901, n = 23
+N60 = 41852, n = 31
+N70 = 28222, n = 44
+N80 = 21358, n = 59
+N90 = 13591, n = 83
+N100 = 2697, n = 133
+N_count = 0
+Gaps = 0
+**How good does the assembly look in terms of contiguity and completeness?**
+
+n=133 means it is fairly fragmented, a finished bacterial genome would be one or a few pieces. 
+
+**Run redbean with higher coverage**
+```{r}
+cat /pvol/data/amtp4/*.fastq > amtp4_20x.fastq
+wtdbg2 -x ont -g 5m -t 4 -i amtp4_20x.fastq -fo amtp4_20x
+wtpoa-cns -t 4 -i amtp4_20x.ctg.lay.gz -fo amtp4_20x.ctg.fa # data equivalent ot aroud 20x coverage
+#takes a bit (a lot) longer 
+```
+
+**Activity:** Inspect assembly stats for higher coverage
+```{r}
+assembly-stats amtp4_20x.fastq
+```
+
+result:
+sum = 159325343, n = 40000, ave = 3983.13, largest = 42815
+N50 = 7147, n = 6711
+N60 = 5719, n = 9200
+N70 = 4455, n = 12358
+N80 = 3248, n = 16524
+N90 = 2008, n = 22665
+N100 = 109, n = 40000
+N_count = 0
+Gaps = 0
+
+looks better
+
+## Flye Assembly
+
+```{r}
+pwd
+cd ..
+cd flye_genome #getting to the right folder
+```
+
+**Run Flye on both datasets**
+Make symbolic links to the same raw data we used for redbean
+```{r}
+ln -s ../redbean/amtp4.fastq .
+ln -s ../redbean/amtp4_20x.fastq .
+```
+
+```{r}
+sbatch run_flye_small.sh #puts it in the que
+```
+
+```{r}
+squeue # check wether it got in the que, this one checks the whole server
+squeue -u $USER # shows only my que
+```
+
+```{r}
+tail slurm-316.out # shows some kind of output??
+```
+
+```{r}
+tail -f slurm-316.out #output again? 
+# run controll c to get out of it 
+```
 
 
