@@ -30,34 +30,34 @@ Notes on `pwd`, `ls`, `cd` and how unix commands are put together.
 
 **ls**
 
-```{r}
+```{bash}
 ls # shows files
 ls -l # lists files in long format
 ls -lr # lists files as in long format -r revers sorts the files
 ls -lrh #
 ```
 
-```{r}
+```{bash}
 ls -l/usr #/usr tells the terminal what directionary to pull from
 ```
 
-```{r}
+```{bash}
 ls /home/ #shows all the users in the rstudio = our class
 ```
 
 **cd**
 
-```{r}
+```{bash}
 cd ~/mb5370-workshops/command_line # cd tells the terminal where to go /where we want to be, sort of gives us the opertunity to place ouself in the righ location in the files and folders. 
 ```
 
-```{r}
+```{bash}
 cd .. # moves up in the directry
 ```
 
 **pwd**
 
-```{r}
+```{bash}
 pwd # Showes us where in the folders and files we are lockated 
 ```
 
@@ -67,33 +67,33 @@ Notes on `cat`, `head`, `grep` and `man`.
 
 **cat**
 
-```{r}
+```{bash}
 cat test.fasta # Showes the content of the file
 ```
 
 **head**
 
-```{r}
+```{bash}
 head -2 test.fasta # head displayes the first 10 lines of the file, but the -2 only displays the first 2 lines
 ```
 
 **grep**
 
-```{r}
+```{bash}
 grep '^>' test.fasta # the grep comand finds specific lines in files.
 ```
 
-```{r}
+```{bash}
 grep KDRNKKNSAK test.fasta # for example here we ask to find a specific amino acid sequence (KDRNKKNSAK) in the test.fasta file
 ```
 
-```{r}
+```{bash}
 grep -n KDRNKKNSAK test.fasta # this one searches the file and shows the line number the sequence is on
 ```
 
 **man**
 
-```{r}
+```{bash}
 man grep # to se usefull flags we use the man command to veiw them. 
 ```
 
@@ -128,23 +128,23 @@ Notes on the fasta and fastq formats.
 
 # Workshop 2
 
-```{r}
+```{bash}
 pwd # dubble check i am in the right spot
 ```
 
 ## Redbean Assembly
 
-```{r}
+```{bash}
 cd ~/mb5370-workshops/redbean # navigate to the redbean folder
 ```
 
-```{r}
+```{bash}
 cat /pvol/data/amtp4/*_[012].fastq > amtp4.fastq # 
 ```
 
 Run the asembly
 
-```{r}
+```{bash}
 wtdbg2 -x ont -g 5m -t 4 -i amtp4.fastq -fo amtp4
 wtpoa-cns -t 4 -i amtp4.ctg.lay.gz -fo amtp4.ctg.fa # takes a few minutes to run this assembly
 #does 6 coverage of the target genome
@@ -152,7 +152,7 @@ wtpoa-cns -t 4 -i amtp4.ctg.lay.gz -fo amtp4.ctg.fa # takes a few minutes to run
 
 **Activity:** Inspect assembly statistics
 
-```{r}
+```{bash}
 assembly-stats amtp4.ctg.fa 
 ```
 
@@ -166,7 +166,7 @@ n=133 means it is fairly fragmented, a finished bacterial genome would be one or
 
 **Run redbean with higher coverage**
 
-```{r}
+```{bash}
 cat /pvol/data/amtp4/*.fastq > amtp4_20x.fastq
 wtdbg2 -x ont -g 5m -t 4 -i amtp4_20x.fastq -fo amtp4_20x
 wtpoa-cns -t 4 -i amtp4_20x.ctg.lay.gz -fo amtp4_20x.ctg.fa # data equivalent ot aroud 20x coverage
@@ -175,7 +175,7 @@ wtpoa-cns -t 4 -i amtp4_20x.ctg.lay.gz -fo amtp4_20x.ctg.fa # data equivalent ot
 
 **Activity:** Inspect assembly stats for higher coverage
 
-```{r}
+```{bash}
 assembly-stats amtp4_20x.fastq
 ```
 
@@ -185,7 +185,7 @@ looks better
 
 ## Flye Assembly
 
-```{r}
+```{bash}
 pwd
 cd ..
 cd flye_genome #getting to the right folder
@@ -193,38 +193,38 @@ cd flye_genome #getting to the right folder
 
 **Run Flye on both datasets** Make symbolic links to the same raw data we used for redbean
 
-```{r}
+```{bash}
 ln -s ../redbean/amtp4.fastq .
 ln -s ../redbean/amtp4_20x.fastq .
 ```
 
 **Activity:** Monitor running jobs
 
-```{r}
+```{bash}
 sbatch run_flye_small.sh #puts it in the que
 ```
 
-```{r}
+```{bash}
 squeue # check wether it got in the que, this one checks the whole server
 squeue -u $USER # shows only my que
 ```
 
-```{r}
+```{bash}
 tail slurm-316.out # shows some kind of output??
 ```
 
-```{r}
+```{bash}
 tail -f slurm-316.out #output again? 
 # run controll c to get out of it 
 ```
 
 **Activity:** Assess assemblies made using Flye
 
-```{r}
+```{bash}
 cd amtp4 # getting to the right folder, i know i dont need to do this but i dont remeber how 
 ```
 
-```{r}
+```{bash}
 assembly-stats assembly.fasta #checking stats
 ```
 
@@ -232,7 +232,7 @@ stats for assembly.fasta
 
 sum = 5177531, n = 77, ave = 67240.66, largest = 368928 N50 = 119681, n = 16 N60 = 99129, n = 20 N70 = 73541, n = 26 N80 = 48093, n = 35 N90 = 31578, n = 48 N100 = 2777, n = 77 N_count = 0 Gaps = 0
 
-```{r}
+```{bash}
 sbatch run_flye_large.sh # running/submitting the large file to the que
 ```
 
@@ -260,11 +260,11 @@ The high coverage (20x) assembly generated two "whole" bacteria genomes, the two
 
 **check** stats for 20x
 
-```{r}
+```{bash}
 cd amtp4_20x
 ```
 
-```{r}
+```{bash}
 assembly-stats assembly.fasta
 ```
 
@@ -292,7 +292,7 @@ Gaps = 0
 
 Use this command to look at the contig sizes in the flye assembly
 
-```{r}
+```{bash}
 cat ../flye_genome/amtp4_20x/assembly.fasta | bioawk -c fastx '{print $name, length($seq)}' | sort -n -k2
 ```
 
@@ -300,13 +300,13 @@ for me the longest were cotig_59 and contig_10
 
 Note that you will need to modify this command by replacing `XX` and `YY` with the contig numbers of the two longest contigs in your assembly.
 
-```{r}
+```{bash}
 samtools faidx ../flye_genome/amtp4_20x/assembly.fasta contig_59 contig_10 > flye_asm/vibrio.fasta
 ```
 
 Now do the same for redbean
 
-```{r}
+```{bash}
 cat ../redbean/amtp4_20x.ctg.fa | bioawk -c fastx '{print $name, length($seq)}' | sort -n -k2
 samtools faidx ../redbean/amtp4_20x.ctg.fa ctg1 ctg2 > redbean_asm/vibrio.fasta
 ```
@@ -316,3 +316,103 @@ ctg2 1764939
 ctg1 3343994
 
 my two longest
+
+Now create a symbolic link to the original reads
+
+```{bash}
+ln -s ../flye_genome/amtp4_20x.fastq .
+```
+
+We also need the reference assembly so make a symbolic link to that as well
+
+```{bash}
+ln -s /pvol/data/amtp4/reference/vibrio .
+```
+
+#### **Run QUAST**
+
+```{bash}
+quast -o quast_vibrio redbean_asm/vibrio.fasta flye_asm/vibrio.fasta -L -t 4 --circos --glimmer -r vibrio/vibrio.fna --features  vibrio/vibrio.gff --nanopore amtp4_20x.fastq
+```
+
+Did this: took a few minutes
+
+## **Optional: Mystery Repeat Region**
+
+```{bash}
+cd ../repeat #get to the right spot in the files 
+```
+
+##### **Extract repeat region sequence**
+
+Use bandage to extract the repeat region as follows;
+
+- Click on the repeat to select it
+
+- Use the `Output` menu to copy the repeat sequence to your clipboard
+
+- In rstudio, open a new blank text file and paste in the sequence
+
+- Edit the text file to add a fasta header line (see below) with the text `>repeat_1`
+
+- Save the file into `repeat/repeat.fasta`
+
+##### **Use `prokka` to annotate it**
+
+Now run prokka on this sequence to see if it contains any transcribed sequences
+
+```{bash}
+prokka --outdir prokka --prefix repeat repeat.fasta
+```
+
+This anotaded it, when its done it says share and enjoy and i had to click contorll c to get out of it
+
+look at what it gennerated:
+
+```{bash}
+cat prokka/repeat.tsv
+```
+
+| locus_tag       | ftype | length_bp | gene | EC_number | COG            | product |
+|-----------------|-------|-----------|------|-----------|----------------|---------|
+| OLFOPNCA_00001  | rRNA  | 111       |      | 5s        | ribosomal      | RNA     |
+| OLFOPNCA_00002  | rRNA  | 2880      |      | 23s       | ribosomal      | RNA     |
+| OLFOPNCA_00003  | CDS   | 138       |      |           | hypothetical   | protein |
+| OLFOPNCA_00004  | tRNA  | 75        |      |           | tRNA-Val(tac)  |         |
+| OLFOPNCA_00005  | tRNA  | 76        |      |           |  tRNA-Lys(ttt) |         |
+| OLFOPNCA_00006  | tRNA  | 76        |      |           | tRNA-Glu(ttc)  |         |
+| OLFOPNCA_00007  | rRNA  | 1547      |      |           | ribosomal      | RNA     |
+
+## **Genomic arrangement of repeats**
+
+#### **Run the alignment**
+
+Link in the data
+
+```{bash}
+ln -s ../quast/vibrio/vibrio.fna .
+```
+
+#### **Examine the alignment**
+
+Try looking at the first few lines of the `paf` file that was produced.
+
+```{bash}
+head  repeat_vs_genome.paf
+```
+
+For our purposes the important columns are those specifying the start and end point on the target. We can extract these columns into a `bed` formatted file as follows;
+
+```{bash}
+cat repeat_vs_genome.paf | grep '^repe' | awk -F '\t' '{print $6,$8,$9}' > repeat_locations.bed
+```
+
+**Question?:** Is this a tandem repeat or interspersed?
+
+it is close ineacuh to a tandem repeate.
+
+it is the DNA for a ribosome, the machenery making proteins.
+
+**Tandem repeat**: repetative DNA sequence that are right next to eachother
+
+**interspersed**: DNA secuence scattered in the dna.
