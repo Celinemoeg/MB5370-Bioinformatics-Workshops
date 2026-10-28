@@ -385,6 +385,8 @@ cat prokka/repeat.tsv
 | OLFOPNCA_00006  | tRNA  | 76        |      |           | tRNA-Glu(ttc)  |         |
 | OLFOPNCA_00007  | rRNA  | 1547      |      |           | ribosomal      | RNA     |
 
+- This repeat has all the little peces to create ribosomes.
+
 ## **Genomic arrangement of repeats**
 
 #### **Run the alignment**

@@ -1,6 +1,6 @@
 ---
 title: "Workshop 3: Metagenome Assembly"
-author: "Your Name"
+author: "Celine M. Egsaeter"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -21,11 +21,159 @@ R chunks in this file run from the top of the repository, so give file paths fro
 
 ## Step 1: Examine reads
 
-Reads are linked into `raw_data/`.
+Reads are linked into `raw_data/`. we start by making a symbolic link to the raw reads file in the raw_data forlder
+
+```{bash}
+cd ~/mb5370-workshops/raw_data #going to the right spot
+```
+
+```{bash}
+ln -s /pvol/data/metagenome_assembly/reads_R10_0.5.fastq.gz raw_reads.fastq.gz #Creating the symbolic link
+```
+
+```{bash}
+cd .. #to get out of raw_data folder 
+```
+
+check if the link works:
+
+```{bash}
+ls -l raw_data
+```
+
+it worked!
+
+**Read Length Distribution**
+
+```{bash}
+zcat raw_data/raw_reads.fastq.gz | head -n 40000 | bioawk -c fastx '{print $name,length($seq)}' > read_lengths.txt
+```
+
+the code above explained:
+
+```{bash}
+# Unzips the raw data and sends the data to standard output
+zcat raw_data/raw_reads.fastq.gz \
+# This is a pipe. It sends output from the previous command as input to the next command
+  | \
+# Here we select only the top 40k lines in the file. This equates to 10k reads. It should be plenty to get some stats
+  head -n 40000 | \
+# This is a small bioawk program. It prints the name of each sequence followed by its length
+  bioawk -c fastx '{print $name,length($seq)}' \
+# Send outputs to a file called read_lengths.txt
+  > read_lengths.txt
+```
+
+visulisation of the read lengths:
+
+```{r}
+library(tidyverse)
+
+rl_data <- read_tsv("read_lengths.txt",col_names = c("id","length"), show_col_types = FALSE)
+
+ggplot(rl_data, aes(x=length/1000)) + 
+  geom_histogram(binwidth = 2) +
+  xlab("Read Length Kb") + ylab("Number of Reads")
+```
+
+**Figure 1:** Histogram of read lengths in the mock nanopore sequencing dataset
+
+It worked!
+
+**Calculating read N50**
+
+- Step 1: Rank all reads from longest to shortest
+
+- Step 2: Create a new column with the cumulative sum of read lengths (starting from longest read).
+
+- Step 3: Find the read at which the cumulative sum surpasses 50% of the total read volume (ie total sum of all read lengths)
+
+```{r}
+total_len <- sum(rl_data$length) #creates df sumarising the length
+
+rl_data |> 
+  arrange(desc(length)) |> #arranges the length in decending order 
+  mutate(cumsum = cumsum(length)) |> 
+  filter(cumsum>total_len/2) |> 
+  head(n=1)
+```
 
 ## Step 2: Assembly
 
 Commands run in `flye_metagenome/`.
+
+- we will use fly to assemble , beacuse it is probobky the best one for long-read metgenome data
+
+Change directory (`cd`) to the `flye_metagenome` folder. We will run all `flye` commands from within this folder.
+
+```{bash}
+cd ~/mb5370-workshops/flye_metagenome
+```
+
+Run flye on the simulated data. Running this command could take a while (\~20 minutes) so we wraped it up into a slurm job script.
+
+1.  Create a new shell script called `run_flye.sh` and save it in the `flye_metagenome` directory
+
+2.  Add the following code to your script (cut-paste)
+
+```{bash}
+#!/bin/bash
+#SBATCH --time=360
+#SBATCH --ntasks=4 --mem=6gb
+
+echo "Starting flye in $(pwd) at $(date)"
+
+flye --nano-hq ../raw_data/raw_reads.fastq.gz --threads 4 --out-dir mock --meta
+
+echo "Finished flye in $(pwd) at $(date)"
+```
+
+3.  Submit your job using the `sbatch` command
+
+```{bash}
+sbatch run_flye.sh
+```
+
+4.  Monitor job output
+
+```{bash}
+tail -f slurm-XXX.out
+```
+
+**Activity:** Flye will report the read N50. How does this compare with the value we computed earlier?
+
+**Activity:** Visualise the assembly using [bandage](https://rrwick.github.io/Bandage/)
+
+**Question 3.1**
+
+What is the size and coverage of the largest contig in the assembly?
+
+the largest continus assembly is 4,681,059bp long and the depth is 21.0x
+
+**Question 3.2**
+
+Your assembly should contain at least one (probably several) large circular contigs. Based on size and coverage can you guess which contig corresponds to the genome of the most abundant species in our mock community?
+
+The largest almost perfectly matches the CP003591(1 4681111 0.584631) which is the geitlerinema genome.
+
+(i found this out by looking at the numbers from the next step.)
+
+#### **Chromosome lengths and GC content in the reference data**
+
+```{bash}
+ls /pvol/data/mg/refs/*.fna
+```
+
+check
+
+```{bash}
+cd ~/mb5370-workshops
+cat /pvol/data/mg/refs/*.fna | bioawk -c fastx -f gc.awk
+```
+
+**Question 3.3**
+
+Locate two circular chromosomes for *Vibrio alfacsensis* in bandage. Use the outputs from `gc.awk` to help with this.
 
 ## Step 3: Basic assembly QC
 
@@ -34,6 +182,14 @@ Commands run in `assembly_check/`.
 ## Step 4: Binning
 
 Commands run in `metabat/`.
+
+- core of workshop 3
+
+- manualy bin an artifical mixture
+
+- idealy a bin should represent a ...
+
+- MetaBAT: builts a distance score S between each contig
 
 ## Step 5: Bin quality with CheckM
 
