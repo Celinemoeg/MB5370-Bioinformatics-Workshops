@@ -369,6 +369,8 @@ This anotaded it, when its done it says share and enjoy and i had to click conto
 
 look at what it gennerated:
 
+note: i used the 20x dna reasambly
+
 ```{bash}
 cat prokka/repeat.tsv
 ```
