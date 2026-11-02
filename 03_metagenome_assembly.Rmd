@@ -179,7 +179,71 @@ Locate two circular chromosomes for *Vibrio alfacsensis* in bandage. Use the out
 
 Commands run in `assembly_check/`.
 
-## Step 4: Binning
+Change into the assembly_check folder
+
+```{bash}
+cd ~/mb5370-workshops/assembly_check
+```
+
+Then i used the gc.awk script to print GC and lengths for the assembly
+
+```{bash}
+cat ../flye_metagenome/mock/assembly.fasta | bioawk -c fastx -f ../gc.awk
+```
+
+then i ran the command again but this time i sent the outputs to a file called `assembly.gc.tsv`.
+
+```{bash}
+cat ../flye_metagenome/mock/assembly.fasta | bioawk -c fastx -f ../gc.awk > assembly.gc.tsv
+```
+
+Creating some exploratory plots from GC content and coverage depth of the contigs:
+
+read them and join them together using R.
+
+```{r}
+gc <- read_tsv("assembly_check/assembly.gc.tsv",col_names = c("#seq_name","length","GC"))
+info <- read_tsv("flye_metagenome/mock/assembly_info.txt")
+```
+
+```{r}
+gc_info <- info |> 
+  left_join(gc)
+```
+
+```{r Histogram}
+gc_info |> 
+  ggplot(aes(x=GC)) + geom_histogram() + ylab("Number of contigs")
+```
+
+**Figure 2**: Histogram of GC content values for assembled contigs in a flye assembly of the mock community dataset.
+
+```{r Point plot}
+gc_info |> 
+  filter(GC<0.8) |> 
+  filter(cov.<25) |> 
+  ggplot(aes(x=GC,y=cov.)) + geom_point(aes(size=length)) + ylab("Coverage depth")
+```
+
+**Figure 3**: Coverage and GC content of assembled contigs in the mock community assembly. Contig lengths are shown through point size.
+
+**Question 3.4**
+
+In the plot of GC versus coverage there is a cluster of contigs with high GC content (\>60%) and coverage depth around 7.5x. Which species are these likely to belong to?
+
+this is most likley th species Vibrio alginolyticus.
+
+```{r}
+library(ggrepel)
+gc_info |> 
+  filter(GC<0.8) |> 
+  filter(cov.<25) |> 
+  ggplot(aes(x=GC,y=cov.)) + geom_point(aes(size=length)) + geom_label_repel(aes(label=`#seq_name`))
+```
+
+**Figure 4**: Coverage and GC content of assembled contigs in the mock community assembly. Contig lengths are shown through point size. Only contigs with less than 25x coverage and less than 80% GC content are shown.
+
+## Binning
 
 Commands run in `metabat/`.
 

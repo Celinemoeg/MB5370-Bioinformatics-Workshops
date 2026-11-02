@@ -375,15 +375,15 @@ note: i used the 20x dna reasambly
 cat prokka/repeat.tsv
 ```
 
-| locus_tag       | ftype | length_bp | gene | EC_number | COG            | product |
-|-----------------|-------|-----------|------|-----------|----------------|---------|
-| OLFOPNCA_00001  | rRNA  | 111       |      | 5s        | ribosomal      | RNA     |
-| OLFOPNCA_00002  | rRNA  | 2880      |      | 23s       | ribosomal      | RNA     |
-| OLFOPNCA_00003  | CDS   | 138       |      |           | hypothetical   | protein |
-| OLFOPNCA_00004  | tRNA  | 75        |      |           | tRNA-Val(tac)  |         |
-| OLFOPNCA_00005  | tRNA  | 76        |      |           |  tRNA-Lys(ttt) |         |
-| OLFOPNCA_00006  | tRNA  | 76        |      |           | tRNA-Glu(ttc)  |         |
-| OLFOPNCA_00007  | rRNA  | 1547      |      |           | ribosomal      | RNA     |
+| locus_tag      | ftype | length_bp | gene | EC_number | COG           | product |
+|----------------|-------|-----------|------|-----------|---------------|---------|
+| OLFOPNCA_00001 | rRNA  | 111       |      | 5s        | ribosomal     | RNA     |
+| OLFOPNCA_00002 | rRNA  | 2880      |      | 23s       | ribosomal     | RNA     |
+| OLFOPNCA_00003 | CDS   | 138       |      |           | hypothetical  | protein |
+| OLFOPNCA_00004 | tRNA  | 75        |      |           | tRNA-Val(tac) |         |
+| OLFOPNCA_00005 | tRNA  | 76        |      |           | tRNA-Lys(ttt) |         |
+| OLFOPNCA_00006 | tRNA  | 76        |      |           | tRNA-Glu(ttc) |         |
+| OLFOPNCA_00007 | rRNA  | 1547      |      |           | ribosomal     | RNA     |
 
 - This repeat has all the little peces to create ribosomes.
 
