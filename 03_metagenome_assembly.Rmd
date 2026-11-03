@@ -300,6 +300,18 @@ reate a new version of the assembly file in which the contigs have the same orde
 cat depths.txt | awk '{print $1}' | xargs samtools faidx ../flye_metagenome/mock/assembly.fasta > assembly_ordered.fasta
 ```
 
+run metabat as follows
+
+```{bash}
+metabat2 -i assembly_ordered.fasta -a depths.txt --cvExt -o bins/metabat --seed 5
+```
+
+The `bins` directory will contain multi-fasta files with each of the bins inferred by metabat. To quickly inspect which contigs were grouped into which bin we can just use a `grep` command like this
+
+```{bash}
+grep '>' bins/*
+```
+
 ## Step 5: Bin quality with CheckM
 
 Commands run in `checkm/`.
