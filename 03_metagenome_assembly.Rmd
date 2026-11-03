@@ -347,3 +347,9 @@ check the que
 ```{bash}
 squeue -u $USER
 ```
+
+tail it
+
+```{bash}
+tail -f slurm-462.out
+```
