@@ -315,3 +315,35 @@ grep '>' bins/*
 ## Step 5: Bin quality with CheckM
 
 Commands run in `checkm/`.
+
+First change into the `checkm` folde
+
+```{bash}
+cd ~/mb5370-workshops/checkm
+```
+
+prepare inputs for checkM.
+
+```{bash}
+cp ../metabat/bins/metabat.*.fa bins/
+```
+
+contig_43 is my longest
+
+```{bash}
+samtools faidx ../flye_metagenome/mock/assembly.fasta contig_43 > bins/contig_43.fa
+```
+
+Now run the checkm workflow. Since `checkm` can be very resource intensive you must run it within a slurm job script. Create a new file within your `checkm` directory and name it `run_checkm.sh`. Copy the following code into your `run_checkm.sh` file
+
+Submit job
+
+```{bash}
+sbatch run_checkm.sh
+```
+
+check the que
+
+```{bash}
+squeue -u $USER
+```
